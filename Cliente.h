@@ -14,7 +14,7 @@
 #define _CLIENTE_H_
 typedef struct Cliente{
     int id;
-
+    
     struct Carreta* carreta;
     struct Cliente* siguiente;
     struct Cliente* anterior;
@@ -28,7 +28,7 @@ typedef struct ListadoCliente{
 /*
     Inicializamos el listado de clientes
 */
-void InicializacionListadoCliente (ListadoCliente* listado){
+void inicializacionListadoCliente (ListadoCliente* listado){
   listado -> inicio = NULL;
   listado -> longitud = 0;
 }
@@ -36,7 +36,7 @@ void InicializacionListadoCliente (ListadoCliente* listado){
 /*
     Creamos un nuevo nodo en el listado de clientes con un id igual al valor asignado
 */
-Cliente* CrearNodoCliente(int valor){
+Cliente* crearNodoCliente(int valor){
     Cliente* nodoAux = (Cliente*) malloc (sizeof(Cliente));
     nodoAux-> id = valor;
     nodoAux-> siguiente = NULL;
@@ -48,7 +48,7 @@ Cliente* CrearNodoCliente(int valor){
 /*
     Liberamos el espacio en memoria que ya no se usara
 */
-void LiberarNodoCliente(Cliente* nodoAux){
+void liberarNodoCliente(Cliente* nodoAux){
     free(nodoAux);
 }
 
@@ -58,7 +58,7 @@ Se inserta el nodo al inicio, y el inicio se apunta al nuevo nodo (PILA)
 void agregarClientePorId(ListadoCliente* listado, int intAux){
     Cliente* nodoAux;
     //instanciamos el nodo
-    nodoAux = CrearNodoCliente(intAux);
+    nodoAux = crearNodoCliente(intAux);
     
     Cliente* nodoAux2 = listado->inicio;
     if(listado->inicio == NULL){
@@ -79,29 +79,63 @@ void agregarClientePorId(ListadoCliente* listado, int intAux){
     
 }
 
-void BuscarNodoCliente(ListadoCliente* listado){
-    int idAux, encontrado = 0, index = 1;
-    Cliente* nodoAux;
+/*
+Se inserta el nodo al inicio, y el inicio se apunta al nuevo nodo (PILA)
+*/
+void agregarClientePorNodo(ListadoCliente* listado, Cliente* nodoAux){
+
+    Cliente* nodoAux2 = listado->inicio;
+    if(listado->inicio == NULL){
+        nodoAux -> siguiente = NULL;
+        //Si existe un inicio        
+        //Agregamos el anterior del inicio apuntando al nuevo nodo
+        nodoAux->anterior = NULL;    
+        listado -> inicio = nodoAux;
+        listado -> longitud = listado->longitud + 1;
+    }else{
+        while(nodoAux2->siguiente != NULL){
+            nodoAux2 = nodoAux2->siguiente;//Iteramos
+        }
+        nodoAux2->siguiente = nodoAux;//Agregamos al final de la cola
+        nodoAux->anterior = nodoAux2;//Agregamos el anterior del nodo a agregar
+        listado -> longitud = listado->longitud + 1;
+    }
     
-    printf("Ingrese el id del nodo al cual buscar: ");
-    scanf("%d", &idAux);
+}
+
+/* Funcion para ubicar un nodo por su id, removerlo del listado y retornar un Cliente*/
+Cliente* extraerNodoListadoCliente(ListadoCliente* listado, int idAux){
+    int encontrado = 0, index = 1;
+    Cliente* nodoAux = listado -> inicio;;
       
     if(listado -> inicio){
-        nodoAux = listado -> inicio;
+        
         while(encontrado == 0){
             //si el siguiente nodo tiene el id deseado
             if(nodoAux -> id == idAux){
                 encontrado = 1;
+                 break;
             }else if(nodoAux -> id != idAux && nodoAux -> siguiente){
                 index++;
                 nodoAux = nodoAux -> siguiente;
-            }else{
-                encontrado = 2;//
             }
         }
-        
+
         if(encontrado == 1){
             printf("Nodo con id %d encontrado con exito, en la posicion %d de la lista\n", idAux, index);
+            Cliente* anterior = nodoAux->anterior;
+            Cliente* siguiente = nodoAux->siguiente;
+            //agregamos las conexiones de los 2 nodos
+            if(anterior != NULL)
+                anterior->siguiente = siguiente; 
+            if(siguiente != NULL)
+                siguiente->anterior = anterior;
+
+            nodoAux->anterior = NULL;
+            nodoAux->siguiente = NULL;
+
+            listado->longitud = listado->longitud - 1;
+            return nodoAux;
             
         }else{
             printf("Nodo no encontrado con el id dado (%d)\n", idAux);
@@ -113,7 +147,7 @@ void BuscarNodoCliente(ListadoCliente* listado){
         
     }
     
- 
+    return nodoAux;
 }
 
 /* Ordenamos el listado de datos segun el id de menor a mayor */
@@ -183,12 +217,12 @@ void generarColasClientes(ListadoCliente* listado1, int idsUsados){
 
 
 /*se imprime el listado*/
-void ImprimirListadoCliente(ListadoCliente* listado){
+void imprimirListadoCliente(ListadoCliente* listado){
     Cliente* nodoAux;
     int i = 1;
     if(listado -> inicio){
          nodoAux = listado -> inicio;
-        while(nodoAux){
+        while(nodoAux){            
             printf("%d -> ", nodoAux -> id);
             nodoAux = nodoAux -> siguiente;
             i++;
