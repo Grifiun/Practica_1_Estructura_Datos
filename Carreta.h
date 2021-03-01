@@ -28,7 +28,7 @@ typedef struct ListadoCarreta{
 /*
     Inicializamos el listado de carretas
 */
-void InicializacionListadoCarreta (ListadoCarreta* listado){
+void inicializacionListadoCarreta (ListadoCarreta* listado){
   listado -> inicio = NULL;
   listado -> longitud = 0;
 }
@@ -36,7 +36,7 @@ void InicializacionListadoCarreta (ListadoCarreta* listado){
 /*
     Creamos un nuevo nodo en el listado de carretas con un id igual al valor asignado
 */
-Carreta* CrearNodoCarreta(int valor){
+Carreta* crearNodoCarreta(int valor){
     Carreta* nodoAux = (Carreta*) malloc (sizeof(Carreta));
     nodoAux-> id = valor;
     nodoAux-> siguiente = NULL;
@@ -46,17 +46,30 @@ Carreta* CrearNodoCarreta(int valor){
 /*
     Liberamos el espacio en memoria que ya no se usara
 */
-void LiberarNodoCarreta(Carreta* nodoAux){
+void liberarNodoCarreta(Carreta* nodoAux){
     free(nodoAux);
 }
 
 /*
 Se inserta el nodo al inicio, y el inicio se apunta al nuevo nodo (PILA)
 */
-void IngresarNodoCarreta(ListadoCarreta* listado, int idCarreta){
+void agregarCarretaPorId(ListadoCarreta* listado, int idCarreta){
     
     Carreta* nodoAux;
-    nodoAux = CrearNodoCarreta(idCarreta);
+    nodoAux = crearNodoCarreta(idCarreta);
+    
+    nodoAux -> siguiente = listado -> inicio;
+    //Si existe un inicio
+    if(listado -> inicio != NULL){
+        listado -> inicio -> anterior = nodoAux;//Agregamos el anterior del inicio apuntando al nuevo nodo
+    }
+    
+    listado -> longitud = listado -> longitud + 1;
+    listado -> inicio = nodoAux;
+}
+
+/* Se agrega el nodo dado a la lista*/
+void agregarCarretaPorNodo(ListadoCarreta* listado, Carreta* nodoAux){
     
     nodoAux -> siguiente = listado -> inicio;
     //Si existe un inicio
@@ -69,7 +82,7 @@ void IngresarNodoCarreta(ListadoCarreta* listado, int idCarreta){
 }
 
 /*se imprime el listado*/
-void ImprimirListadoCarreta(ListadoCarreta* listado){
+void imprimirListadoCarreta(ListadoCarreta* listado){
     Carreta* nodoAux;
     int i = 1;
     if(listado -> inicio){
@@ -101,7 +114,7 @@ void generarPilasCarreta(ListadoCarreta* listado1, int idUsados){
             //agregamos la carreta a la pila
             /* Asignamos a la pila */
             //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
-            IngresarNodoCarreta(listado1, idUsados + 1 + i);        
+            agregarCarretaPorId(listado1, idUsados + 1 + i);        
         //agregamos el iterador
         i++;
     }    
@@ -120,12 +133,12 @@ void agregarCarretaPilas(ListadoCarreta* listado1, ListadoCarreta* listado2){
         case 0:
             /* Asignamos a la pila 1 */
             //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
-            IngresarNodoCarreta(listado1, i + 1);
+            agregarCarretaPorId(listado1, i + 1);
             break;
         case 1:
             /* Asignamos a la pila 2 */
             //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
-            IngresarNodoCarreta(listado2, i + 1);
+            agregarCarretaPorId(listado2, i + 1);
             break;
         default:
             break;
