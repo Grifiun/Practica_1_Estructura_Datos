@@ -55,11 +55,16 @@ void liberarNodoCliente(Cliente* nodoAux){
 /*
 Se inserta el nodo al inicio, y el inicio se apunta al nuevo nodo (PILA)
 */
-void agregarClientePorId(ListadoCliente* listado, int intAux){
+void agregarClientePorId(ListadoCliente* listado, int intAux, int idCarreta){
     Cliente* nodoAux;
     //instanciamos el nodo
     nodoAux = crearNodoCliente(intAux);
+    if(idCarreta > 0){//si es mayor a 0, lleva una carreta y por ende
+        Carreta* carretaAux = crearNodoCarreta(idCarreta);//creamos la carreta si se le asigno una 
+        nodoAux->carreta = carretaAux;//le asignamos la carreta al nodo auxiliar cliente
+    }
     
+
     Cliente* nodoAux2 = listado->inicio;
     if(listado->inicio == NULL){
         nodoAux -> siguiente = NULL;
@@ -106,7 +111,7 @@ void agregarClientePorNodo(ListadoCliente* listado, Cliente* nodoAux){
 /* Funcion para ubicar un nodo por su id, removerlo del listado y retornar un Cliente*/
 Cliente* extraerNodoListadoCliente(ListadoCliente* listado, int idAux){
     int encontrado = 0, index = 1;
-    Cliente* nodoAux = listado -> inicio;;
+    Cliente* nodoAux = listado -> inicio;
       
     if(listado -> inicio){
         
@@ -122,7 +127,10 @@ Cliente* extraerNodoListadoCliente(ListadoCliente* listado, int idAux){
         }
 
         if(encontrado == 1){
-            printf("Nodo con id %d encontrado con exito, en la posicion %d de la lista\n", idAux, index);
+            //printf("Nodo con id %d encontrado con exito, en la posicion %d de la lista\n", idAux, index);
+            if(listado->inicio == nodoAux){//si el que removemos es el primero de la lista, agregamos el nuevo inicio
+                listado->inicio = nodoAux->siguiente;
+            }
             Cliente* anterior = nodoAux->anterior;
             Cliente* siguiente = nodoAux->siguiente;
             //agregamos las conexiones de los 2 nodos
@@ -132,7 +140,7 @@ Cliente* extraerNodoListadoCliente(ListadoCliente* listado, int idAux){
                 siguiente->anterior = anterior;
 
             nodoAux->anterior = NULL;
-            nodoAux->siguiente = NULL;
+            nodoAux->siguiente = NULL;           
 
             listado->longitud = listado->longitud - 1;
             return nodoAux;
@@ -198,7 +206,7 @@ void ordenarListadoCliente(ListadoCliente* listado){
 }
 
 /*Ingresar n cantidad de clientes a la cola, y los id iran de inicioId hasta inicioId + cantidadClientes*/
-void generarColasClientes(ListadoCliente* listado1, int idsUsados){
+void generarColasClientes(ListadoCliente* listado1, int idsUsados, int llevanCarretas, int idCarretasUsados){
     int i = 0;
     int cantidadClientesEsperaCarretas;
     scanf("%d", &cantidadClientesEsperaCarretas);
@@ -209,7 +217,12 @@ void generarColasClientes(ListadoCliente* listado1, int idsUsados){
     while(i < cantidadClientesEsperaCarretas){
         //agregamos la clientes a la cola
         //Agregamos la cola donde se agregara la y el id, el cual es el iterador + 1 (para que empiece en 1)
-        agregarClientePorId(listado1, 1 + idsUsados + i);        
+        if(llevanCarretas > 0)//si tiene carreta
+            agregarClientePorId(listado1, 1 + idsUsados + i, idCarretasUsados + i + 1);   
+        else{
+            agregarClientePorId(listado1, 1 + idsUsados + i, 0); 
+        }
+             
         //agregamos el iterador
         i++;
     }    
@@ -222,9 +235,18 @@ void imprimirListadoCliente(ListadoCliente* listado){
     int i = 1;
     if(listado -> inicio){
          nodoAux = listado -> inicio;
-        while(nodoAux){            
-            printf("%d -> ", nodoAux -> id);
-            nodoAux = nodoAux -> siguiente;
+        while(nodoAux){   
+            //Si no es el primer dato y el siguiente nodo es el inicio de la vuelta terminamos todo, difinimos este fin por si se usa para imprimir el listado circular de las compras
+            if(i > 1 && nodoAux == listado->inicio){
+                break;
+            }
+
+            if(nodoAux->carreta != NULL)//si tiene una carreta 
+                printf("CL: %d , CARR: %d -> ", nodoAux -> id, nodoAux->carreta->id);    
+            else   
+                printf("CL: %d -> ", nodoAux -> id);
+            
+            nodoAux = nodoAux -> siguiente;            
             i++;
         }
         
