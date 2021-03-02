@@ -121,24 +121,27 @@ void generarPilasCarreta(ListadoCarreta* listado1, int idUsados){
 }
 
 /*Ingresar cantidad carretas*/
-void agregarCarretaPilas(ListadoCarreta* listado1, ListadoCarreta* listado2){
+void agregarCarretaPilas(ListadoCarreta* listado1, ListadoCarreta* listado2, Carreta* carretaAux){
     int cantidadCarretasAux = 1;
     int i = 0;
     //Generamos un ciclo para agregar la cantida de carretas dada
     while(i < cantidadCarretasAux){
-        int numeroAleatorio = getNumeroAleatorio();
+        int numeroAleatorio = getNumeroAleatorio(0, 1);
 
         switch (numeroAleatorio)
         {
         case 0:
             /* Asignamos a la pila 1 */
             //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
-            agregarCarretaPorId(listado1, i + 1);
+            agregarCarretaPorNodo(listado1, carretaAux);
+
+            printf("La carreta %d volvio a la pila de carretas (%d) \n", carretaAux->id, 1);
             break;
         case 1:
             /* Asignamos a la pila 2 */
             //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
-            agregarCarretaPorId(listado2, i + 1);
+            agregarCarretaPorNodo(listado2, carretaAux);
+            printf("La carreta %d volvio a la pila de carretas (%d) \n", carretaAux->id, 2);
             break;
         default:
             break;
@@ -146,6 +149,29 @@ void agregarCarretaPilas(ListadoCarreta* listado1, ListadoCarreta* listado2){
         //agregamos el iterador
         i++;
     }
+    
+}
+
+/*Ingresar cantidad carretas*/
+Carreta* sacarPrimeraCarretaDisponible(ListadoCarreta* listado1, ListadoCarreta* listado2){
+    /* Asignamos a la pila 1 */
+    //Agregamos la pila donde se agregara la carreta y el id, el cual es el iterador + 1 (para que empiece en 1)
+    if(listado1->inicio != NULL){
+        Carreta* carretaAux = listado1->inicio;
+        listado1->inicio = listado1->inicio->siguiente;//la pila de carretas comenzara en la siguiente
+        carretaAux->siguiente = NULL;
+        carretaAux->anterior = NULL;
+        listado1->longitud = listado1->longitud - 1;//reducimos la longitud en 1
+        return carretaAux;
+    }else if(listado2->inicio != NULL){//si la primera pila esta vacia, se busca en la segunda
+        Carreta* carretaAux = listado2->inicio;
+        listado2->inicio = listado2->inicio->siguiente;//la pila de carretas comenzara en la siguiente
+        carretaAux->siguiente = NULL;
+        carretaAux->anterior = NULL;
+        listado2->longitud = listado2->longitud - 1;//reducimos la longitud en 1
+        return carretaAux;
+    }
+    return NULL;
     
 }
 

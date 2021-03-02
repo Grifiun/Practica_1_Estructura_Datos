@@ -11,11 +11,10 @@
 #ifndef _NUMERO_ALEATORIO_H_
 #define _NUMERO_ALEATORIO_H_
 
-int getNumeroAleatorio(){
+int getNumeroAleatorio(int inicio, int fin){
     int numeroAleatorio;
-    //numeroAleatorio = rand () % (N-M+1) + M;   // Este está entre M y N
-    numeroAleatorio = rand () % (2);   // Este está entre 0 y 1
-
+    //numeroAleatorio = rand () % (N-M+1) + M;   // Este está entre M(inicio) y N(fin)
+    numeroAleatorio = rand () % (fin - inicio + 1) + inicio;   
     return numeroAleatorio;
 }
 
