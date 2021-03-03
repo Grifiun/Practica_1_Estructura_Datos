@@ -259,6 +259,66 @@ void imprimirListadoCliente(ListadoCliente* listado){
    
 }
 
+/*se imprime el listado*/
+FILE* ingresarSubGrafoCliente(ListadoCliente* listado, FILE* archivoDOT, const char *encabezadoSubgrafo, const char *tituloSubGrafo){
+    Cliente* nodoAux;
+    int i = 1;
+    fputs(encabezadoSubgrafo, archivoDOT);//inicioSubGrafo    
+    //Generamos los nodos en la figura
+    if(listado -> inicio){
+         nodoAux = listado -> inicio;
+        while(nodoAux){   
+            //Si no es el primer dato y el siguiente nodo es el inicio de la vuelta terminamos todo, difinimos este fin por si se usa para imprimir el listado circular de las compras
+            if(i > 1 && nodoAux == listado->inicio){
+                break;
+            }
+
+            if(nodoAux->carreta != NULL){//si tiene una carreta
+                char stra[50];
+                sprintf(stra, "Cliente%d[label=\"Cliente: %d\nCarreta: %d\"];\n", nodoAux -> id, nodoAux -> id, nodoAux->carreta->id);
+                //printf("%s", stra);
+                fputs(stra, archivoDOT);
+            } else {
+                char stra[50];
+                sprintf(stra, "Cliente%d[label=\"Cliente: %d\"];\n", nodoAux -> id, nodoAux -> id);
+                //printf("%s", stra);
+                fputs(stra, archivoDOT);
+            }
+            
+            nodoAux = nodoAux -> siguiente;            
+            i++;
+        }
+        
+    }
+
+    i = 1;
+    if(listado -> inicio){
+        nodoAux = listado -> inicio;
+        while(nodoAux){   
+            //Si no es el primer dato y el siguiente nodo es el inicio de la vuelta terminamos todo, difinimos este fin por si se usa para imprimir el listado circular de las compras
+            if(i > 1 && nodoAux == listado->inicio){
+                break;
+            }
+            char stra[50];
+            if(nodoAux->siguiente != NULL){//si tiene un siguiente
+                sprintf(stra, "Cliente%d -> Cliente%d;\n", nodoAux -> id, nodoAux -> siguiente -> id);
+                fputs(stra, archivoDOT);
+            }
+            if(nodoAux->anterior != NULL){//si tiene un anterior
+                sprintf(stra, "Cliente%d -> Cliente%d;\n", nodoAux -> id, nodoAux -> anterior -> id);
+                fputs(stra, archivoDOT);
+            }
+            nodoAux = nodoAux -> siguiente;            
+            i++;
+        }
+        
+    }
+
+    fputs(tituloSubGrafo, archivoDOT);//titulo del subgrafo
+    fputs("}", archivoDOT);//fin del subgrafo
+   return archivoDOT;
+}
+
 /*obtener lognitud de la lista*/
 int getLongitudListaCliente(ListadoCliente* listado){
     return listado->longitud;

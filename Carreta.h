@@ -81,27 +81,6 @@ void agregarCarretaPorNodo(ListadoCarreta* listado, Carreta* nodoAux){
     listado -> inicio = nodoAux;
 }
 
-/*se imprime el listado*/
-void imprimirListadoCarreta(ListadoCarreta* listado){
-    Carreta* nodoAux;
-    int i = 1;
-    if(listado -> inicio){
-         nodoAux = listado -> inicio;
-        while(nodoAux){
-            printf("%d -> ", nodoAux -> id);
-            nodoAux = nodoAux -> siguiente;
-            i++;
-        }
-        
-    }else{
-        printf("Lista vacia");
-        
-    }
-    //damos el salto de linea
-    printf("\n");
-   
-}
-
 /*Ingresar cantidad carretas, y los id iran de inicioId hasta inicioId + cantidadCarretas*/
 void generarPilasCarreta(ListadoCarreta* listado1, int idUsados){
     int i = 0;
@@ -178,6 +157,80 @@ Carreta* sacarPrimeraCarretaDisponible(ListadoCarreta* listado1, ListadoCarreta*
 /*obtener lognitud de la lista*/
 int getLongitudListaCarreta(ListadoCarreta* listado){
     return listado->longitud;
+}
+
+/*se imprime el listado*/
+void imprimirListadoCarreta(ListadoCarreta* listado){
+    Carreta* nodoAux;
+    int i = 1;
+    if(listado -> inicio){
+         nodoAux = listado -> inicio;
+        while(nodoAux){
+            printf("%d -> ", nodoAux -> id);
+            nodoAux = nodoAux -> siguiente;
+            i++;
+        }
+        
+    }else{
+        printf("Lista vacia");
+        
+    }
+    //damos el salto de linea
+    printf("\n");
+   
+}
+
+/*se imprime el listado*/
+FILE* ingresarSubGrafoCarreta(ListadoCarreta* listado, FILE* archivoDOT, const char *encabezadoSubgrafo, const char *tituloSubGrafo){
+    Carreta* nodoAux;
+    int i = 1;
+    fputs(encabezadoSubgrafo, archivoDOT);//inicioSubGrafo    
+    //Generamos los nodos en la figura
+    if(listado -> inicio){
+         nodoAux = listado -> inicio;
+        while(nodoAux){   
+            //Si no es el primer dato y el siguiente nodo es el inicio de la vuelta terminamos todo, difinimos este fin por si se usa para imprimir el listado circular de las compras
+            if(i > 1 && nodoAux == listado->inicio){
+                break;
+            }
+
+            char stra[50];
+            sprintf(stra, "Carreta%d[label=\"Carreta: %d\"];\n", nodoAux -> id, nodoAux -> id);
+            //printf("%s", stra);
+            fputs(stra, archivoDOT);
+            
+            nodoAux = nodoAux -> siguiente;            
+            i++;
+        }
+        
+    }
+       
+    i = 1;
+    if(listado -> inicio){
+        nodoAux = listado -> inicio;
+        while(nodoAux){   
+            //Si no es el primer dato y el siguiente nodo es el inicio de la vuelta terminamos todo, difinimos este fin por si se usa para imprimir el listado circular de las compras
+            if(i > 1 && nodoAux == listado->inicio){
+                break;
+            }
+            char stra[50];
+            if(nodoAux->siguiente != NULL){//si tiene un siguiente
+                sprintf(stra, "Carreta%d -> Carreta%d;\n", nodoAux -> id, nodoAux -> siguiente -> id);
+                fputs(stra, archivoDOT);
+            }
+            if(nodoAux->anterior != NULL){//si tiene un anterior
+                sprintf(stra, "Carreta%d -> Carreta%d;\n", nodoAux -> id, nodoAux -> anterior -> id);
+                fputs(stra, archivoDOT);
+            }
+            nodoAux = nodoAux -> siguiente;            
+            i++;
+        }
+        
+    }
+
+    fputs(tituloSubGrafo, archivoDOT);//titulo del subgrafo
+    fputs("}", archivoDOT);//fin del subgrafo
+   return archivoDOT;
 }
 
 #endif //_CARRETA_H_
