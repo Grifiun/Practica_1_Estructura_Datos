@@ -199,13 +199,13 @@ FILE* ingresarSubGrafoCaja(ListadoCaja* listado, FILE* archivoDOT, const char *e
             }            
 
             if(nodoAux->estado != 0){//si tiene una carreta
-                char stra[50];
-                sprintf(stra, "Caja%d [label=\"Caja: %d\nCliente: %d\nCarreta: %d\"];\n", nodoAux -> id, nodoAux->id,nodoAux->cliente->id, nodoAux->cliente->carreta->id);                
+                char stra[100];
+                sprintf(stra, "Caja%d [label=\"Caja: %d\nEstado: %s\nT. Servicio: %d\nTS Actual: %d\nCliente: %d\nCarreta: %d\"];\n", nodoAux -> id, nodoAux->id, "ocupado",nodoAux->tiempoServicio, nodoAux->tiempoServicioCompletado,nodoAux->cliente->id, nodoAux->cliente->carreta->id);                
                 //printf("%s", stra);
                 fputs(stra, archivoDOT);
             } else {
-                char stra[50];
-                sprintf(stra, "Caja%d[label=\"Caja: %d\"];\n", nodoAux -> id, nodoAux -> id);
+                char stra[100];
+                sprintf(stra, "Caja%d[label=\"Caja: %d\nEstado: %s\nT. Servicio: %d\"];\n", nodoAux -> id, nodoAux -> id, "libre",nodoAux->tiempoServicio);
                 //printf("%s", stra);
                 fputs(stra, archivoDOT);
             }
