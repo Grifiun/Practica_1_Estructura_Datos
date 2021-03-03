@@ -1,0 +1,78 @@
+digraph Grafica {
+subgraph cluster_ColaCarreta {
+label="Cola espera"}subgraph cluster_ColaCompra {
+Cliente6[label="Cliente: 6
+Carreta: 1"];
+Cliente7[label="Cliente: 7
+Carreta: 2"];
+Cliente8[label="Cliente: 8
+Carreta: 3"];
+Cliente9[label="Cliente: 9
+Carreta: 4"];
+Cliente10[label="Cliente: 10
+Carreta: 5"];
+Cliente1[label="Cliente: 1
+Carreta: 15"];
+Cliente2[label="Cliente: 2
+Carreta: 14"];
+Cliente3[label="Cliente: 3
+Carreta: 13"];
+Cliente4[label="Cliente: 4
+Carreta: 12"];
+Cliente5[label="Cliente: 5
+Carreta: 11"];
+Cliente6 -> Cliente7;
+Cliente6 -> Cliente5;
+Cliente7 -> Cliente8;
+Cliente7 -> Cliente6;
+Cliente8 -> Cliente9;
+Cliente8 -> Cliente7;
+Cliente9 -> Cliente10;
+Cliente9 -> Cliente8;
+Cliente10 -> Cliente1;
+Cliente10 -> Cliente9;
+Cliente1 -> Cliente2;
+Cliente1 -> Cliente10;
+Cliente2 -> Cliente3;
+Cliente2 -> Cliente1;
+Cliente3 -> Cliente4;
+Cliente3 -> Cliente2;
+Cliente4 -> Cliente5;
+Cliente4 -> Cliente3;
+Cliente5 -> Cliente6;
+Cliente5 -> Cliente4;
+label="Cola compra"}subgraph cluster_ColaPago {
+label="Cola pagos"}subgraph cluster_Carreta1 {
+Carreta10[label="Carreta: 10"];
+Carreta9[label="Carreta: 9"];
+Carreta8[label="Carreta: 8"];
+Carreta10 -> Carreta9;
+Carreta9 -> Carreta8;
+Carreta9 -> Carreta10;
+Carreta8 -> Carreta9;
+label="Pila carretas 1"}subgraph cluster_Carreta2 {
+Carreta7[label="Carreta: 7"];
+Carreta6[label="Carreta: 6"];
+Carreta20[label="Carreta: 20"];
+Carreta19[label="Carreta: 19"];
+Carreta18[label="Carreta: 18"];
+Carreta17[label="Carreta: 17"];
+Carreta16[label="Carreta: 16"];
+Carreta7 -> Carreta6;
+Carreta6 -> Carreta20;
+Carreta6 -> Carreta7;
+Carreta20 -> Carreta19;
+Carreta20 -> Carreta6;
+Carreta19 -> Carreta18;
+Carreta19 -> Carreta20;
+Carreta18 -> Carreta17;
+Carreta18 -> Carreta19;
+Carreta17 -> Carreta16;
+Carreta17 -> Carreta18;
+Carreta16 -> Carreta17;
+label="Pila carretas 2"}subgraph cluster_ColaCaja {
+Caja1[label="Caja: 1"];
+Caja2[label="Caja: 2"];
+Caja1 -> Caja2;
+Caja2 -> Caja1;
+label="Cajas de pago"}}

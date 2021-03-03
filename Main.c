@@ -13,6 +13,7 @@
 #include "Compra.h"
 #include "Caja.h"
 #include "NumeroAleatorio.h"
+#include "ExportarGrafica.h"
 
 /*Funcion que se usara para iniciar el programa e indicar la cantidad de nodos en cada lista*/
 void ingresarCantidadDatosListas(ListadoCliente* listadoClienteEsperaCarretas, ListadoCliente* listadoClienteCompra, ListadoCliente* listadoClienteColaPago, ListadoCarreta* pilaCarreta1, ListadoCarreta* pilaCarreta2, ListadoCaja* listadoCaja){
@@ -147,13 +148,12 @@ int main(){
 
     //ingresamos los datos iniciales de nodos en cada lista
     ingresarCantidadDatosListas(listadoClienteEsperaCarretas, listadoClienteCompra, listadoClienteColaPago, pilaCarreta1, pilaCarreta2, listadoCaja);
-
-
-    //menu
-
+    //Dibujamos la entrada
+    exportarListas(listadoClienteEsperaCarretas, listadoClienteCompra, listadoClienteColaPago, listadoCaja, pilaCarreta1, pilaCarreta2);
     int opcion;
     int paso = 1;
     do{
+         //menu
         printf("1. Hacer simulacion\n");
         printf("2. Listar todo\n");
         printf("otro: Salir\n");
@@ -172,6 +172,8 @@ int main(){
                 listaPagoACaja(listadoClienteColaPago, listadoCaja);
                 //4. Terminar de darle el servicio al cliente en las cajas ocupadas
                 servicioClienteEnCajaTerminado(listadoCaja, pilaCarreta1, pilaCarreta2);
+                //5. Exportar las listas a una imagen png para visualizarlo mejor
+                exportarListas(listadoClienteEsperaCarretas, listadoClienteCompra, listadoClienteColaPago, listadoCaja, pilaCarreta1, pilaCarreta2);
                 paso++;
                 break;
             case 2:
